@@ -1,0 +1,140 @@
+Java 9 feature:-
+1- The plateform Module System:- 
+Modular JAR files contain an additional module descriptor. In this module descriptor, dependencies on other modules are expressed through`requires` statements. Additionally, `exports` statements control which packages are accessible to other modules. All non-exported packages are encapsulated in the module by default.
+Ex.
+module blog {
+  exports com.pluralsight.blog;
+
+  requires cms;
+}
+a module should adhere to three core principles –
+*Strong Encapsulation.
+*Stable Abstraction.
+* Explicit Dependencies.
+2. Linking:-
+When you have modules with explicit dependencies, and a modularized JDK, new possibilities arise. Your application modules now state their dependencies on other application modules and on the modules it uses from the JDK. Why not use that information to create a minimal runtime environment, containing just those modules necessary to run your application? That's made possible with the new jlink tool in Java 9. 
+3. Compact Strings Improvement [JEP 254]:-
+Till Java 8, String in java were internally represented by char[]. Each char is stored in 2 bytes in memory. JDK developers at oracle analyzed lots of client’s application heap dumps and they noticed that most of the strings can be represented only using Latin-1 characters set. A latin-1 char can be stored in one byte, which is 50% (1 byte) less than char data type storage.
+
+So, the JDK developers defaulted the String classes internal storage to byte[] from char[]. This has resulted in saving of lots of space in heap memory because string objects take up really big portion of heap memory, generally. 
+String class AFTER Java 9:-
+public final class String
+    implements java.io.Serializable, Comparable<String>, CharSequence {
+ 
+    /** The value is used for character storage. */
+    @Stable
+    private final byte[] value;
+ 
+    /**
+     * The identifier of the encoding used to encode the bytes in
+     * {@code value}. The supported values in this implementation are
+     *
+     * LATIN1
+     * UTF16
+     *
+     * @implNote This field is trusted by the VM, and is a subject to
+     * constant folding if String instance is constant. Overwriting this
+     * field after construction will cause problems.
+     */
+    private final byte coder;
+ 
+}
+3. JShell: the interactive Java REPL:-
+JShell is new command line interactive tool shipped with JDK 9 distribution [JEP 222] to evaluate declarations, statements and expressions written in Java. JShell allows us to execute Java code snippets and get immediate results without having to create a solution or project.
+4. Collection factory methods:-
+Often you want to create a collection (e.g., a List or Set) in your code and directly populate it with some elements. That leads to repetitive code where you instantiate the collection, followed by several `add` calls.
+
+Set<Integer> ints = Set.of(1, 2, 3);
+List<String> strings = List.of("first", "second");
+
+5. Stream API improvements:-A stream is a sequence of objects that supports various methods which can be pipelined to produce the desired result.
+The features of Java stream are –
+
+*A stream is not a data structure instead it takes input from the Collections, Arrays or I/O channels.
+Streams don’t change the original data structure, they only provide the result as per the pipelined methods.
+*Each intermediate operation is lazily executed and returns a stream as a result, hence various intermediate operations can be pipelined. Terminal operations mark the end of the stream and return the result.
+
+Different Operations On Streams-
+Intermediate Operations:
+
+* map: The map method is used to map the items in the collection to other objects according to the Predicate passed as argument.
+List number = Arrays.asList(2,3,4,5);
+List square = number.stream().map(x->x*x).collect(Collectors.toList());
+* filter: The filter method is used to select elements as per the Predicate passed as argument.
+List names = Arrays.asList("Reflection","Collection","Stream");
+List result = names.stream().filter(s->s.startsWith("S")).collect(Collectors.toList());
+* sorted: The sorted method is used to sort the stream.
+List names = Arrays.asList("Reflection","Collection","Stream");
+List result = names.stream().sorted().collect(Collectors.toList());
+
+Terminal Operations:
+
+collect: The collect method is used to return the result of the intermediate operations performed on the stream.
+List number = Arrays.asList(2,3,4,5,3);
+Set square = number.stream().map(x->x*x).collect(Collectors.toSet());
+forEach: The forEach method is used to iterate through every element of the stream.
+List number = Arrays.asList(2,3,4,5);
+number.stream().map(x->x*x).forEach(y->System.out.println(y));
+reduce: The reduce method is used to reduce the elements of a stream to a single value.
+The reduce method takes a BinaryOperator as a parameter.
+List number = Arrays.asList(2,3,4,5);
+int even = number.stream().filter(x->x%2==0).reduce(0,(ans,i)-> ans+i);
+7. Private interface methods:-
+Java 8 brought us default methods on interfaces. An interface can now also contain behavior instead of only method signatures. But what happens if you have several default methods on an interface with code that does almost the same thing? Normally, you'd refactor those methods to call a private method containing the shared functionality. But default methods can't be private. Creating another default method with the shared code is not a solution, because this helper method becomes part of the public API.
+
+8. Enhanced @Deprecated Annotation:-
+Two new enhancements are made to @Deprecated annotation.
+
+forRemoval − Indicates whether the annotated element is subject to removal in a future version. The default value is false.
+
+since − Returns the version in which the annotated element became deprecated. The default value is the empty string.
+
+Java 9 - Improved JavaDocs:-
+Command to Generate API Doc:- javadoc -d C:/JAVA Tester.java
+
+Old style java documentation:-
+
+/**
+  * @author MahKumar
+  * @version 0.1
+*/
+public class Tester {
+   /**
+      * Default method to be run to print 
+      * <p>Hello world</p>
+      * @param args command line arguments
+   */
+   public static void main(String []args) {
+      System.out.println("Hello World");
+   }
+}
+
+but in new updated version of API doc create on Web application file, which can be access from same directory with same html page.
+10: - Collection Factory Methods:-
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
+
+public class Tester {
+
+   public static void main(String []args) {
+      Set<String> set = Set.of("A", "B", "C");      
+      System.out.println(set);
+      List<String> list = List.of("A", "B", "C");
+      System.out.println(list);
+      Map<String, String> map = Map.of("A","Apple","B","Boy","C","Cat");
+      System.out.println(map);
+  
+      Map<String, String> map1 = Map.ofEntries (
+         new AbstractMap.SimpleEntry<>("A","Apple"),
+         new AbstractMap.SimpleEntry<>("B","Boy"),
+         new AbstractMap.SimpleEntry<>("C","Cat"));
+      System.out.println(map1);
+   }
+}

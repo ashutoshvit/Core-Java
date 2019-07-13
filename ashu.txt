@@ -1,0 +1,1 @@
+The data in a JCR consists of a tree of nodes with associated properties. Data is stored in the properties,

@@ -26,7 +26,7 @@ public class MaxDuplicateWordCount {
 			fis=new FileInputStream(fileName);
 			dis=new DataInputStream(fis);
 			br=new BufferedReader(new InputStreamReader(dis));
-			String line=null;
+			String	 line=null;
 			while((line=br.readLine())!=null) {
 				StringTokenizer st=new StringTokenizer(line, " ");
 				while(st.hasMoreTokens()) {

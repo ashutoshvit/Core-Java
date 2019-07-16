@@ -10,32 +10,32 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class FindTwoLinesWithMaxCharactorDesending {
-	public static void main(String args[]) {
-	BufferedReader br=null;
-	String filePath=null;
-	int topList=0;
-	Set<Entries> liSet=new TreeSet<Entries>(new MyComparator());
-	try {
-		br=new BufferedReader(new FileReader(new File(filePath)));
-		String line=br.readLine();
-		topList=Integer.parseInt(line.trim());
-		while((line = br.readLine()) != null){
-            line = line.trim();
-            if(!"".equals(line)){
-                liSet.add(new Entries(line.length(), line));
-            }
-        }
-		int count=0;
-		for(Entries ent:liSet) {
-			System.out.println(ent.line);
-			if(++count==topList) {
-				break;
+	public static void main(String args[]) throws NumberFormatException {
+		BufferedReader br=null;
+		String filePath=args[0];
+		int topList=0;
+		Set<Entries> liSet=new TreeSet<Entries>(new MyComparator());
+		try {
+			br=new BufferedReader(new FileReader(new File(filePath)));
+			String line=br.readLine();
+			topList=Integer.parseInt(line.trim());
+			while((line = br.readLine()) != null){
+				line = line.trim();
+				if(!"".equals(line)){
+					liSet.add(new Entries(line.length(), line));
+				}
 			}
-		}		
-	}
-	catch(FileNotFoundException ex) {ex.printStackTrace();}
-	catch(IOException ex) {ex.printStackTrace();}
-	
+			int count=0;
+			for(Entries ent:liSet) {
+				System.out.println(ent.line);
+				if(++count==topList) {
+					break;
+				}
+			}		
+		}
+		catch(FileNotFoundException ex) {ex.printStackTrace();}
+		catch(IOException ex) {ex.printStackTrace();}
+
 	}
 
 	public static class Entries{
@@ -45,7 +45,7 @@ public class FindTwoLinesWithMaxCharactorDesending {
 			this.lenght=lenght;
 			this.line=line;
 		}
-		
+
 	}
 	public static class MyComparator implements Comparator<Entries> {
 
@@ -54,10 +54,10 @@ public class FindTwoLinesWithMaxCharactorDesending {
 			if(o2.lenght>o1.lenght) {
 				return 1;
 			}else {
-			return -1;
+				return -1;
 			}
 		}
-		
+
 	}
 }
 
